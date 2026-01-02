@@ -15,20 +15,21 @@ The framework operates as a hybrid HTTP/WebSocket server. It demonstrates how to
 
 ```mermaid
 graph TD
-    User[User / Frontend] <-->|HTTP POST| APIGateway[Flask API Gateway]
-    User <-->|WebSocket| WSServer[WebSocket Server]
+    User["User / Frontend"] <-->|HTTP POST| APIGateway["Flask API Gateway"]
+    User <-->|WebSocket| WSServer["WebSocket Server"]
     
     subgraph "Practice Focus: Voice & Core"
-        APIGateway --> Voice[Voice Module (ElevenLabs Implementation)]
-        APIGateway --> RAG[RAG Engine (Gemini + ChromaDB)]
+        APIGateway --> Voice["Voice Module - ElevenLabs"]
+        APIGateway --> RAG["RAG Engine - Gemini + ChromaDB"]
         WSServer --> RAG
     end
     
     subgraph "Capabilities"
-        RAG --> Knowledge[Vector Store (ChromaDB)]
-        RAG --> Tools[Tool Executor]
-        Tools --> GoogleSheets[Google Sheets API]
+        RAG --> Knowledge["Vector Store - ChromaDB"]
+        RAG --> Tools["Tool Executor"]
+        Tools --> GoogleSheets["Google Sheets API"]
     end
+
 ```
 
 ### Key Features (Learning Outcomes)
