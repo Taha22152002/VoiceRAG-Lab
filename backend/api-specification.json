@@ -1,0 +1,128 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Appointment Scheduling API",
+    "version": "1.0.0",
+    "description": "API for checking availability and booking slots in a Google Sheet schedule."
+  },
+  "servers": [
+    {
+      "url": "http://127.0.0.1:5000/api",
+      "description": "Local Development Server for Appointment API"
+    }
+  ],
+  "paths": {
+    "/appointments/slots": {
+      "get": {
+        "summary": "Retrieves all available appointment slots for a specified date.",
+        "operationId": "getAvailableSlots",
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "example": "2025-11-13"
+            },
+            "description": "The date to check for availability in YYYY-MM-DD format."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of available slots or a status message.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "date": {
+                        "type": "string"
+                      },
+                      "time": {
+                        "type": "string"
+                      },
+                      "status": {
+                        "type": "string",
+                        "enum": [
+                          "Available",
+                          "Error"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Books a specific time slot for a user.",
+        "operationId": "bookSlot",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "date",
+                  "time",
+                  "user_id"
+                ],
+                "properties": {
+                  "date": {
+                    "type": "string",
+                    "format": "date",
+                    "example": "2025-11-14",
+                    "description": "The date of the appointment (YYYY-MM-DD)."
+                  },
+                  "time": {
+                    "type": "string",
+                    "example": "10:00 AM",
+                    "description": "The time slot to book (must match a column header)."
+                  },
+                  "user_id": {
+                    "type": "string",
+                    "example": "Taha-9999",
+                    "description": "The unique identifier for the user booking the slot."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Slot booked successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing parameters in the request body."
+          },
+          "409": {
+            "description": "Conflict, slot is already booked."
+          }
+        }
+      }
+    }
+  }
+}
